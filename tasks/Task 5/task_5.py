@@ -2,6 +2,7 @@
 import asyncio
 from collections import defaultdict
 
+
 class AsyncEventEmitter:
     def __init__(self):
         self.events = defaultdict(list)
@@ -27,6 +28,30 @@ async def on_data_received(data):
     await asyncio.sleep(1)
     print(f"Data received: {data}")
 
+
 async def on_error_occurred(error):
     await asyncio.sleep(1)
     print(f"Error occurred: {error}")
+
+
+async def run_event_emitter():
+    emitter = AsyncEventEmitter()
+
+    await emitter.subscribe("data", on_data_received)
+    await emitter.subscribe("error", on_error_occurred)
+
+    print("Emitting 'data' event...")
+    await emitter.emit("data", "This is some async data!")
+
+    await emitter.emit("error", "Something went async wrong...")
+    await emitter.unsubscribe("error", on_error_occurred)
+
+    print("Emitting 'data' again...")
+    await emitter.emit("data", "More async data!")
+
+    print("Emitting 'error' again...")
+    await emitter.emit("error", "You should not see this whoomp(.")
+
+
+if __name__ == "__main__":
+    asyncio.run(run_event_emitter())
