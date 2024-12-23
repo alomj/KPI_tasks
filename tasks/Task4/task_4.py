@@ -8,7 +8,7 @@ async def async_text_processor(file_path, chunk_size=25):
 
     async with aiofiles.open(file_path, 'r', encoding='utf-8') as file:
         while chunk := await file.read(chunk_size):
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.2)
             yield chunk.upper()
 
 async def main():
@@ -21,5 +21,4 @@ async def main():
         print(f"[CHUNK]: {processed_chunk}")
 
 if __name__ == "__main__":
-    import aiofiles
     asyncio.run(main())
