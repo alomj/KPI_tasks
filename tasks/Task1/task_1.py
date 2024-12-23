@@ -25,7 +25,7 @@ async def multiply_by_two(x):
 
 
 async def main():
-    array = [1, 2, 3, 4, 5]
+    array = [1, 2, 3, 4, 5, 6]
     print("Without debounce:")
     results = await async_map(array, multiply_by_two)
     print("Results:", results)
