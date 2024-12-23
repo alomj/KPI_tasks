@@ -22,3 +22,11 @@ class AsyncEventEmitter:
                 *(callback(*args, **kwargs) for callback in self.events[event_name])
             )
 
+
+async def on_data_received(data):
+    await asyncio.sleep(1)
+    print(f"Data received: {data}")
+
+async def on_error_occurred(error):
+    await asyncio.sleep(1)
+    print(f"Error occurred: {error}")
