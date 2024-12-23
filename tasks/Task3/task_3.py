@@ -21,4 +21,30 @@ class AbortController:
         return self._cancelled
 
 
+async def cancellable_task(controller: AbortController, task_id: int):
+    try:
+        for i in range(10):
+            if controller.is_aborted():
+                print(f"Task {task_id} aborted!")
+                break
+            print(f"Task {task_id} working... step {i}")
+            await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        print(f"Task {task_id} was cancelled via asyncio.")
+    finally:
+        print(f"Task {task_id} is exiting.")
 
+
+async def main():
+    controller = AbortController()
+    task1 = asyncio.create_task(cancellable_task(controller, 1))
+    task2 = asyncio.create_task(cancellable_task(controller, 2))
+
+    await asyncio.sleep(3)
+
+    print("Sending abort signal!")
+    await controller.abort()
+
+    await asyncio.gather(task1, task2, return_exceptions=True)
+
+asyncio.run(main())
